@@ -7,14 +7,23 @@ setup() {
   export DDEV_NON_INTERACTIVE=true
   ddev delete -Oy ${PROJNAME} >/dev/null 2>&1 || true
   cd "${TESTDIR}"
+  tar -zxf ${DIR}/tests/testdata/d10.3.1.tgz
   ddev config --project-name=${PROJNAME}
   ddev start -y >/dev/null
 }
 
 health_checks() {
-  # Do something useful here that verifies the add-on
-  # ddev exec "curl -s elasticsearch:9200" | grep "${PROJNAME}-elasticsearch"
-  ddev exec "curl -s https://localhost:443/"
+  # Try using drush on host to do a sql command
+  curl -L -s --fail -o /tmp/drush https://github.com/drush-ops/drush/releases/download/8.4.12/drush.phar && chmod +x /tmp/drush
+  export IS_DDEV_PROJECT=true
+  echo "SHOW TABLES;" | /tmp/drush sql-cli
+
+  # Do an import-db and then make sure we can still do SHOW tables.
+  ddev import-db --file=${DIR}/tests/testdata/users.sql.gz
+  echo "SHOW TABLES;" | /tmp/drush sql-cli
+
+  # Make sure that drush sql-cli works inside container
+  echo "SHOW TABLES;" | ddev drush sql-cli
 }
 
 teardown() {

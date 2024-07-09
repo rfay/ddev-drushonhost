@@ -3,7 +3,33 @@
 # Installed by ddev-drushonhost add-on
 hooks:
   post-start:
-    - exec-host: if grep "[#]ddev-generated" ${DDEV_APPROOT}/${DDEV_DOCROOT}/sites/default/settings.ddev.php 2>/dev/null; then printf "\n\n// support running from drush on host side\n// added by rfay/ddev-drushonhost add-on\nif (empty(getenv('DDEV_PHP_VERSION') && getenv('IS_DDEV_PROJECT') == 'true')) {\n    \$databases['default']['default']['host'] = '127.0.0.1';\n    \$databases['default']['default']['port'] = ${DDEV_HOST_DB_PORT};\n}\n" >> ${DDEV_APPROOT}/${DDEV_DOCROOT}/sites/default/settings.ddev.php; fi
+    - exec-host: |
+        if grep "[#]ddev-generated" ${DDEV_APPROOT}/${DDEV_DOCROOT}/sites/default/settings.ddev.php 2>/dev/null; then
+          set +H
+          cat <<-EOF >> "${DDEV_APPROOT}/${DDEV_DOCROOT}/sites/default/settings.ddev.php"
+        
+        
+        // support running from drush on host side
+        // added by rfay/ddev-drushonhost add-on
+        if (!getenv('DDEV_PHP_VERSION') && getenv('IS_DDEV_PROJECT') == 'true') {
+          \$databases['default']['default']['host'] = '127.0.0.1';
+          \$databases['default']['default']['port'] = ${DDEV_HOST_DB_PORT};
+        }
+        EOF
+        fi
 
   post-import-db:
-  - exec-host: if grep "[#]ddev-generated" ${DDEV_APPROOT}/${DDEV_DOCROOT}/sites/default/settings.ddev.php 2>/dev/null; then printf "\n\n// support running from drush on host side\n// added by rfay/ddev-drushonhost add-on\nif (empty(getenv('DDEV_PHP_VERSION') && getenv('IS_DDEV_PROJECT') == 'true')) {\n    \$databases['default']['default']['host'] = '127.0.0.1';\n    \$databases['default']['default']['port'] = ${DDEV_HOST_DB_PORT};\n}\n" >> ${DDEV_APPROOT}/${DDEV_DOCROOT}/sites/default/settings.ddev.php; fi
+    - exec-host: |
+        if grep "[#]ddev-generated" ${DDEV_APPROOT}/${DDEV_DOCROOT}/sites/default/settings.ddev.php 2>/dev/null; then
+          set +H
+          cat <<-EOF >> "${DDEV_APPROOT}/${DDEV_DOCROOT}/sites/default/settings.ddev.php"
+        
+        
+        // support running from drush on host side
+        // added by rfay/ddev-drushonhost add-on
+        if (!getenv('DDEV_PHP_VERSION') && getenv('IS_DDEV_PROJECT') == 'true') {
+          \$databases['default']['default']['host'] = '127.0.0.1';
+          \$databases['default']['default']['port'] = ${DDEV_HOST_DB_PORT};
+        }
+        EOF
+        fi
