@@ -8,7 +8,17 @@ This add-on adds that facility again.
 
 One-time in project:
 
-`ddev get rfay/ddev-drushonhost`
+For DDEV v1.23.5 or above run
+
+```sh
+ddev add-on get rfay/ddev-drushonhost
+```
+
+For earlier versions of DDEV run
+
+```sh
+ddev get rfay/ddev-drushonhost
+```
 
 When using drush on the host you need:
 
